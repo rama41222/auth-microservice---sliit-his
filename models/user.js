@@ -39,16 +39,14 @@ var UserSchema = mongoose.Schema({
     type :String,
     required : true
   },
-  contact : [
-    {
-      tp: String
-    }
-  ],
-  address : [
-    {
-      adrline: String
-    }
-  ],
+  contact : {
+
+      type: Array
+  },
+  address : {
+
+      type: Array
+  },
   position : {
     type : String,
     requried : true

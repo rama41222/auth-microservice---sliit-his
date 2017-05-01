@@ -100,7 +100,7 @@ module.exports.addUser = (newUser, callback) =>{
         return;
       }
       newUser.password = hash;
-      newUser.Insert(callback);
+      newUser.save(callback);
     });
 
   });

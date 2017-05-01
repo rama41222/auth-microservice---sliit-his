@@ -10,7 +10,7 @@ const config = require('./config/database.js');
 
 //app config
 const app = express();
-const port = 3001;
+const port = 8888;
 
 //database connection string
 mongoose.connect(config.database);
@@ -50,9 +50,7 @@ app.use('/users',users);
 app.get('/',(req,res) => {
   res.json({"api":"sliit his pharmacy module api v1.0.0"});
 });
-app.use(function(req, res){
-  res.redirect('/');
-});
+
 
 //start the server in a port specified above
 app.listen(port, (err)=>{

@@ -25,7 +25,7 @@ router.post('/register',(req,res,next) => {
 
   unameString = unameString.toLowerCase();
   emailString = emailString.toLowerCase();
-  
+
   let newUser = new User({
 
     fullname : req.body.fullname,
@@ -46,9 +46,9 @@ router.post('/register',(req,res,next) => {
   });
 
   User.getUserByUsername(unameString,(err,user) =>{
-    console.log(unameString);
+
     if(err) throw err;
-    console.log(user);
+
     if(user == null){
       User.addUser(newUser,(err, user)=>{
         if(err){
@@ -170,7 +170,6 @@ router.post('/authenticate',(req,res,next) => {
 
       User.updateUser(user,(err,updatedUser)=>{
         if(err){
-          console.log(err);
          return res.json({success:false, msg: "User not found!"});
        }else{
 
@@ -187,7 +186,7 @@ router.post('/authenticate',(req,res,next) => {
   router.delete('/',(req,res,next) => {
     let username = req.body.username;
       User.removeUser(username,(err,user) => {
-        console.log(err);
+
         if(err) throw err;
         if(user){
           return res.json({success:true, msg: "User Removed Successfully!"});

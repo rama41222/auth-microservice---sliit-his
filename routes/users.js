@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const config = require('../config/database');
 const User = require('../models/user');
 
-//register
+//register a user
 router.post('/register',(req,res,next) => {
 
   let fname = req.body.fullname;
@@ -65,7 +65,7 @@ router.post('/register',(req,res,next) => {
 
 });
 
-//Authenticate
+//Authenticate a user
 router.post('/authenticate',(req,res,next) => {
 
   const username = req.body.username;
@@ -110,12 +110,30 @@ router.post('/authenticate',(req,res,next) => {
 
   });
 
+  //secure test route
   router.get('/profile',passport.authenticate('jwt',{session:false}),(req,res,next) => {
 
     res.json({user: req.user});
 
   });
+  
+  //Display all the users
+  router.get('/',(req,res,next) => {
+    User.getAllUsers((err,users) => {
+      if(err) throw err;
 
+      if(users){
+
+          return res.json({success:true, userlist: users });
+      }else{
+
+          return res.json({success:false, msg: "No Users Found"});
+      }
+    });
+
+  });
+
+  //update an existing user
   router.put('/:username',(req,res,next) => {
     let username = req.params.username;
     User.getUserByUsername(username,(err,user)=>{
@@ -168,6 +186,7 @@ router.post('/authenticate',(req,res,next) => {
 
   });
 
+  //Delete an exisitng user
   router.delete('/',(req,res,next) => {
     let username = req.body.username;
       User.removeUser(username,(err,user) => {

@@ -109,6 +109,11 @@ module.exports.removeUser = (username,callback) => {
   User.findOneAndRemove(username,callback);
 
 }
+module.exports.getAllUsers = (callback) => {
+
+  User.find(callback);
+
+}
 module.exports.updateUser = (updatedUser, callback) =>{
 
   updatedUser.save(callback);

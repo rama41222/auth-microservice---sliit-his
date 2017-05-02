@@ -24,7 +24,8 @@ router.post('/register',(req,res,next) => {
   }
 
   unameString = unameString.toLowerCase();
-
+  emailString = emailString.toLowerCase();
+  
   let newUser = new User({
 
     fullname : req.body.fullname,
@@ -45,14 +46,14 @@ router.post('/register',(req,res,next) => {
   });
 
   User.getUserByUsername(unameString,(err,user) =>{
-
+    console.log(unameString);
     if(err) throw err;
-
-    if(!user){
+    console.log(user);
+    if(user == null){
       User.addUser(newUser,(err, user)=>{
         if(err){
 
-          res.json({success:false, msg:"Failed to register user"});
+          res.json({success:false, msg:"Failed to register user " ,err : err});
 
         } else {
 

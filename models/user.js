@@ -91,8 +91,12 @@ module.exports.getUserByEmail = (email, callback) =>{
 
 module.exports.addUser = (newUser, callback) =>{
 
-  bcrypt.genSalt(20,(err,salt)=>{
+  bcrypt.genSalt(1,(err,salt)=>{
+
+    if(err) throw err
+
     bcrypt.hash(newUser.password, salt, (err, hash)=>{
+
       if(err){
         console.log("Error in adding user " + err);
         return;

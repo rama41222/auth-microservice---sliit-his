@@ -65,7 +65,7 @@ var UserSchema = mongoose.Schema({
   },
   email : {
     type : String,
-    required : true
+    required : true,
   }
 });
 
@@ -102,6 +102,16 @@ module.exports.addUser = (newUser, callback) =>{
     });
 
   });
+
+}
+module.exports.removeUser = (username,callback) => {
+
+  User.findOneAndRemove(username,callback);
+
+}
+module.exports.updateUser = (updatedUser, callback) =>{
+
+  updatedUser.save(callback);
 
 }
 

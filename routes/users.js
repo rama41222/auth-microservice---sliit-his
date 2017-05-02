@@ -10,12 +10,20 @@ router.post('/register',(req,res,next) => {
 
   let fname = req.body.fullname;
   let nameArr = fname.split(" ");
-  var unameString = "P";
-  var emailString = nameArr[(nameArr.length-2)] + "." + nameArr[(nameArr.length-1)] + "@his.sliit.lk";
+  var unameString = "p";
+  if(nameArr[(nameArr.length-2)] ){
+      var emailString = nameArr[(nameArr.length-2)] + "." + nameArr[(nameArr.length-1)] + "@his.sliit.lk";
+  }else {
+
+      var emailString = unameString + "." + nameArr[(nameArr.length-1)] + "@his.sliit.lk";
+  }
+
 
   for(var i = 0; i < nameArr.length; i++){
     unameString = unameString + nameArr[i].substring(0,3);
   }
+
+  unameString = unameString.toLowerCase();
 
   let newUser = new User({
 
@@ -116,7 +124,7 @@ router.post('/authenticate',(req,res,next) => {
     res.json({user: req.user});
 
   });
-  
+
   //Display all the users
   router.get('/',(req,res,next) => {
     User.getAllUsers((err,users) => {
@@ -145,15 +153,6 @@ router.post('/authenticate',(req,res,next) => {
 
       }
 
-      let fname = req.body.fullname;
-      let nameArr = fname.split(" ");
-      var unameString = "P";
-      var emailString = nameArr[(nameArr.length-2)] + "." + nameArr[(nameArr.length-1)] + "@his.sliit.lk";
-
-      for(var i = 0; i < nameArr.length; i++){
-        unameString = unameString + nameArr[i].substring(0,3);
-      }
-
         user.fullname = req.body.fullname;
         user.surname = req.body.surname;
         user.dob = req.body.dob;
@@ -166,10 +165,7 @@ router.post('/authenticate',(req,res,next) => {
         user.address = req.body.address;
         user.position = req.body.position;
         user.auth_level = req.body.auth_level;
-        user.username =  unameString;
         user.password = req.body.password;
-        user.email = emailString;
-
 
       User.updateUser(user,(err,updatedUser)=>{
         if(err){

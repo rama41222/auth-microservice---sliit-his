@@ -17,12 +17,12 @@ mongoose.connect(config.database);
 
 //database connection success
 mongoose.connection.on('connected', () =>{
-    console.log("Connected to database " + config.database);
+	console.log("Connected to database " + config.database);
 });
 
 //database connection success
 mongoose.connection.on('error', (err) => {
-  console.log("Database Error Occured : " + err);
+	console.log("Database Error Occured : " + err);
 });
 
 
@@ -43,20 +43,22 @@ require('./config/passport')(passport);
 
 
 const users = require('./routes/users');
+const drugs = require('./routes/drugs');
 //add routes
 app.use('/users',users);
+app.use('/drugs',drugs);
 
 //default route
 app.get('/',(req,res) => {
-  res.json({"api":"sliit his pharmacy module api v1.0.0"});
+	res.json({"api":"sliit his pharmacy module api v1.0.0"});
 });
 
 
 //start the server in a port specified above
 app.listen(port, (err)=>{
-  if(err){
-    console.log("Error : " + err);
-    return;
-  }
-    console.log("Server started running at " + port);
+	if(err){
+		console.log("Error : " + err);
+		return;
+	}
+	console.log("Server started running at " + port);
 });

@@ -4,6 +4,7 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const config = require('../config/database');
 const User = require('../models/user');
+const Prescription = require('../models/prescription');
 
 //register a user
 router.post('/register',(req,res,next) => {
@@ -121,9 +122,7 @@ router.post('/authenticate',(req,res,next) => {
 
   //secure test route
   router.get('/profile',passport.authenticate('jwt',{session:false}),(req,res,next) => {
-
     res.json({user: req.user});
-
   });
 
   //Display all the users
@@ -195,6 +194,98 @@ router.post('/authenticate',(req,res,next) => {
 
         }
       });
+
+  });
+
+
+
+//Prescription routes
+  router.get('/:username/prescriptions',(req,res,next)=>{
+          let username = req.params.username;
+
+          User.getUserByUsername(username, (err,user) =>{
+            if (err) throw err;
+
+            if(user){
+              Prescription.getAllPresciptionsByUsername(user._id,(err,prescriptions) => {
+
+                  if(err) throw err;
+
+                  if(prescriptions){
+                        return res.json({success:true, prescriptionsList: prescriptions });
+                  }else{
+                        return res.json({success:false, msg : "No prescriptons to display"});
+                  }
+
+              });
+
+            }else{
+                    return res.json({success:false, msg : "Invalid username"});
+            }
+
+          });
+  });
+
+  router.post('/:username/prescriptions',(req,res,next)=>{
+    let username = req.params.username;
+
+       User.getUserByUsername(username, (err,user) =>{
+        console.log(err);
+         if (err) throw err;
+
+         if(user.position.toLowerCase().includes("doctor")){
+
+           user_id = user._id;
+           let fullname = req.body.fullname;
+           let age = req.body.age;
+           let prescribed_drugs = req.body.prescribed_drugs;
+
+           var pid = "p-";
+           let nameArr = fullname.trim().split(" ");
+
+           for(var i = 0; i < nameArr.length; i++){
+             pid = pid + nameArr[i].substring(0,3);
+           }
+           var d = new Date().getFullYear();
+           let birthYear  = d - age;
+           pid = pid.toLowerCase()+age+"-"+birthYear;
+
+           let newPrescription = new Prescription({
+               pid:pid,
+               fullname:fullname,
+               age:age,
+               created_date:new Date(),
+               prescribed_drugs : prescribed_drugs,
+               physician : user_id
+
+             });
+
+             Prescription.addPrescription(newPrescription,(err, prescription)=>{
+               if(err){
+                 res.json({success:false, msg:"Failed to add the prescription " , err : err});
+
+               } else {
+                 res.json({success:true, msg:"Successfully saved the prescription"});
+
+               }
+
+             });
+
+         }else{
+              return res.json({success:false, msg: "This user is not authorized to create prescriptions"});
+         }
+
+       });
+
+  });
+
+  router.put('/:username/prescriptions/:id',(req,res,next)=>{
+
+
+  });
+
+  router.delete('/:username/prescriptions',(req,res,next)=>{
+
 
   });
 

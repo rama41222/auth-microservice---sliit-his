@@ -78,13 +78,13 @@ module.exports.getUserById = (id, callback) =>{
 }
 
 module.exports.getUserByUsername = (username, callback) =>{
-  const query = { username : username };
+  let query = { username : username };
   User.findOne(query,callback);
 
 }
 
 module.exports.getUserByEmail = (email, callback) =>{
-  const query = { email : email };
+  let query = { email : email };
   User.findOne(query,callback);
 
 }
@@ -121,6 +121,12 @@ module.exports.getAllUsers = (callback) => {
 module.exports.updateUser = (updatedUser, callback) =>{
 
   updatedUser.save(callback);
+
+}
+
+module.exports.isDoctor = (username, callback) =>{
+  let query = { username : username};
+  updatedUser.findOne(query,callback);
 
 }
 

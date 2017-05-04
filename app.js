@@ -25,8 +25,6 @@ mongoose.connection.on('error', (err) => {
 	console.log("Database Error Occured : " + err);
 });
 
-
-
 //adding static directories
 app.use(express.static(path.join(__dirname + 'public')));
 
@@ -41,18 +39,18 @@ app.use(passport.initialize());
 app.use(passport.session());
 require('./config/passport')(passport);
 
-
 const users = require('./routes/users');
 const drugs = require('./routes/drugs');
+const prescriptions = require('./routes/prescriptions');
 //add routes
 app.use('/users',users);
 app.use('/drugs',drugs);
+app.use('/prescriptions',prescriptions);
 
 //default route
 app.get('/',(req,res) => {
 	res.json({"api":"sliit his pharmacy module api v1.0.0"});
 });
-
 
 //start the server in a port specified above
 app.listen(port, (err)=>{

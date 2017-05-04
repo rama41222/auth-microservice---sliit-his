@@ -3,17 +3,18 @@ const router = express.Router();
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const config = require('../config/database');
+const User = require('../models/user');
 const Drug = require('../models/drug');
 
 // Get all the drugs
-router.get('/drugs',(req,res,nexr)=>{
+router.get('/',(req,res,next)=>{
 
   Drug.getAllDrugs((err,drugs) => {
     if(err) throw err;
 
     if(drugs){
 
-        return res.json({success:true, userlist: drugs });
+        return res.json({success:true, drugList: drugs });
     }else{
 
         return res.json({success:false, msg: "No Drugs Found"});
@@ -23,13 +24,14 @@ router.get('/drugs',(req,res,nexr)=>{
 });
 
 // New Drug
-router.post('/drugs',(req,res,next)=>{
+router.post('/',(req,res,next)=>{
 
   Drug.getDrugById(id,(err,drug) =>{
 
     if(err) throw err;
 
     if(drug == null){
+
       User.addDrug(drug,(err, drug)=>{
         if(err){
 
@@ -53,13 +55,13 @@ router.post('/drugs',(req,res,next)=>{
 });
 
 // Update a drug
-router.put('/drugs/:id',(req,res,nexr)=>{
+router.put('/:id',(req,res,next)=>{
 
 
 });
 
 //Remove Drug
-router.delete('/drugs',(req,res,nexr)=>{
+router.delete('/',(req,res,next)=>{
 
 
 });

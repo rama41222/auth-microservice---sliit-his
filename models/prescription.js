@@ -22,7 +22,8 @@ var PrescriptionSchema = mongoose.Schema({
     required : true
   },
   prescribed_drugs : [{
-      drug: { type: String, lowercase: true, trim: true }
+      drug: { type: String, lowercase: true, trim: true },
+      duration: { type: String, trim: true }
   }],
   physician : {
 
@@ -45,4 +46,22 @@ module.exports.getAllPresciptions = (callback) =>{
 module.exports.getAllPresciptionsByUsername = (_id ,callback) =>{
       let query = {physician : _id };
       Prescription.find(query,callback);
+}
+module.exports.getPrescriptionBy_Id = (_id, callback)=>{
+
+  let query = { _id : _id };
+  Prescription.findOne(query,callback);
+
+}
+
+module.exports.removePrescription = (_id,callback) => {
+
+  Prescription.findOneAndRemove(_id,callback);
+
+}
+
+module.exports.updatePrescription = (updatedPrescription, callback) =>{
+
+  updatedPrescription.save(callback);
+
 }

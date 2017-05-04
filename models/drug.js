@@ -1,4 +1,3 @@
-
 const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 const config = require('../config/database');
@@ -42,7 +41,11 @@ module.exports.updateDrugs = (updatedDrug,callback) => {
   updatedDrug.save(callback);
 
 }
+module.exports.updateDrugs = (updatedDrug,callback) => {
 
+  updatedDrug.save(callback);
+
+}
 module.exports.getDrugById = (id, callback)=>{
 
   let query = { id : id };

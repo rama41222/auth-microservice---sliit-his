@@ -137,3 +137,7 @@ module.exports.comparePassword = (candidatePassword,hash,callback) =>{
   });
 
 }
+
+module.exports.usersSearch = (searchString,callback) =>{
+  User.find({$or : [{fullname: new RegExp(searchString, 'i')},{surname: new RegExp(searchString, 'i')},{sex: new RegExp(searchString, 'i')},{blood_group: new RegExp(searchString, 'i')},{username: new RegExp(searchString, 'i')},{position: new RegExp(searchString, 'i')},{email: new RegExp(searchString, 'i')}]},callback);
+}

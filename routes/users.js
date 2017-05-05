@@ -120,9 +120,20 @@ router.post('/authenticate',(req,res,next) => {
 
   });
 
-  //secure test route
-  router.get('/profile',passport.authenticate('jwt',{session:false}),(req,res,next) => {
-    res.json({user: req.user});
+  //secure test route //passport.authenticate('jwt',{session:false})
+  router.get('/:searchString',(req,res,next) => {
+    let searcString = req.params.searchString;
+    User.usersSearch(searcString,(err,users) => {
+      if(err) throw err;
+      
+      if(users){
+
+        return res.json({success:true, userlist: users });
+      }else{
+
+        return res.json({success:false, msg: "No Users Found"});
+      }
+    });
   });
 
   //Display all the users

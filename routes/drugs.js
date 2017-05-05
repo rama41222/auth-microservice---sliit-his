@@ -23,6 +23,23 @@ router.get('/',(req,res,next)=>{
 
 });
 
+router.get('/:searchString',(req,res,next)=>{
+  let searchString = req.params.searchString;
+
+  Drug.drugsSearch(searchString,(err,drugs) => {
+    if(err) throw err;
+
+    if(drugs){
+
+      return res.json({success:true, drugList: drugs });
+    }else{
+
+      return res.json({success:false, msg: "No Drugs Found"});
+    }
+  });
+
+});
+
 // New Drug
 router.post('/',(req,res,next)=>{
 

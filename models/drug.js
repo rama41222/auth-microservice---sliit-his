@@ -70,3 +70,7 @@ module.exports.removeDrug = (id,callback) => {
   Drug.findOneAndRemove(id,callback);
 
 }
+
+module.exports.drugsSearch = (searchString,callback) =>{
+  User.find({$or : [{id: new RegExp(searchString, 'i')},{name: new RegExp(searchString, 'i')},{type: new RegExp(searchString, 'i')},{added_date: new RegExp(searchString, 'i')}]},callback);
+}

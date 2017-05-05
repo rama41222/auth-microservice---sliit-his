@@ -15,8 +15,9 @@ var DrugSchema = mongoose.Schema({
 
   },
   type : {
-    type : String,
-    required : true
+     type: mongoose.Schema.Types.ObjectId,
+     ref: 'Categories',
+     required : true
 
   },
   added_date : {
@@ -36,12 +37,7 @@ module.exports.addDrug = (newDrug,callback) => {
   newDrug.save(callback);
 }
 
-module.exports.updateDrugs = (updatedDrug,callback) => {
-
-  updatedDrug.save(callback);
-
-}
-module.exports.updateDrugs = (updatedDrug,callback) => {
+module.exports.updateDrug = (updatedDrug,callback) => {
 
   updatedDrug.save(callback);
 
@@ -72,5 +68,7 @@ module.exports.removeDrug = (id,callback) => {
 }
 
 module.exports.drugsSearch = (searchString,callback) =>{
+
   User.find({$or : [{id: new RegExp(searchString, 'i')},{name: new RegExp(searchString, 'i')},{type: new RegExp(searchString, 'i')},{added_date: new RegExp(searchString, 'i')}]},callback);
+
 }

@@ -88,7 +88,7 @@ router.put('/:_id',(req,res,next)=>{
   });
 
 });
-
+// delete a prescription
 router.delete('/',(req,res,next)=>{
 
   let prescription_id = req.body._id;

@@ -45,7 +45,8 @@ router.post('/register',(req,res,next) => {
     password : req.body.password,
     email : emailString,
   });
-
+  
+  //Getting all users by username
   User.getUserByUsername(unameString,(err,user) =>{
 
     if(err) throw err;
@@ -125,7 +126,7 @@ router.post('/authenticate',(req,res,next) => {
     let searcString = req.params.searchString;
     User.usersSearch(searcString,(err,users) => {
       if(err) throw err;
-      
+
       if(users){
 
         return res.json({success:true, userlist: users });
@@ -382,6 +383,7 @@ router.post('/authenticate',(req,res,next) => {
 
   });
 
+  //Delete a prescription created by a user
   router.delete('/:username/prescriptions',(req,res,next)=>{
 
     let username = req.params.username;

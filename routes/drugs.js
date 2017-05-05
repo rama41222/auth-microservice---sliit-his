@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken');
 const config = require('../config/database');
 const User = require('../models/user');
 const Drug = require('../models/drug');
+const Category = require('../models/category');
+
 
 // Get all the drugs
 router.get('/',(req,res,next)=>{
@@ -23,6 +25,7 @@ router.get('/',(req,res,next)=>{
 
 });
 
+// seach a drug
 router.get('/:searchString',(req,res,next)=>{
   let searchString = req.params.searchString;
 
@@ -43,11 +46,22 @@ router.get('/:searchString',(req,res,next)=>{
 // New Drug
 router.post('/',(req,res,next)=>{
 
+  let username
+
   Drug.getDrugById(id,(err,drug) =>{
 
     if(err) throw err;
 
     if(drug == null){
+
+      let newDrug = new Drug({
+          id:pid,
+          name:req.body.name,
+          type:age,
+          added_date:new Date(),
+          image : prescribed_drugs
+
+        });
 
       User.addDrug(drug,(err, drug)=>{
         if(err){
@@ -73,6 +87,34 @@ router.post('/',(req,res,next)=>{
 
 // Update a drug
 router.put('/:id',(req,res,next)=>{
+
+Drug.getDrugById(id,(err,drug) =>{
+
+    if(err) throw err;
+
+    if(drug){
+
+      User.updateDrug(drug,(err, drug)=>{
+        if(err){
+
+          res.json({success:false, msg:"Failed to update the drug " ,err : err});
+
+        } else {
+
+          res.json({success:true, msg:"Successfully updated the drug"});
+
+        }
+
+      });
+
+    }else{
+
+      res.json({success:false, msg:"Invalid Drug"});
+
+    }
+
+  });
+
 
 
 });

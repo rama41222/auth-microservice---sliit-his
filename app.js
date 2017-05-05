@@ -42,10 +42,12 @@ require('./config/passport')(passport);
 const users = require('./routes/users');
 const drugs = require('./routes/drugs');
 const prescriptions = require('./routes/prescriptions');
+const categories = require('./routes/categories');
 //add routes
 app.use('/users',users);
 app.use('/drugs',drugs);
 app.use('/prescriptions',prescriptions);
+app.use('/categories',categories);
 
 //default route
 app.get('/',(req,res) => {

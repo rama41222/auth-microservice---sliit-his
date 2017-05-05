@@ -14,10 +14,10 @@ router.get('/',(req,res,next)=>{
 
     if(drugs){
 
-        return res.json({success:true, drugList: drugs });
+      return res.json({success:true, drugList: drugs });
     }else{
 
-        return res.json({success:false, msg: "No Drugs Found"});
+      return res.json({success:false, msg: "No Drugs Found"});
     }
   });
 

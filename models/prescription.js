@@ -65,3 +65,18 @@ module.exports.updatePrescription = (updatedPrescription, callback) =>{
   updatedPrescription.save(callback);
 
 }
+
+//special cases
+module.exports.getAllPresciptionsByPatientName = (name,callback) =>{
+    let query = {fullname : /name/i };
+      Prescription.find(callback);
+}
+
+module.exports.getAllPresciptionsByPID = (pid,callback) =>{
+    let query = {fullname : pid };
+      Prescription.find(callback);
+}
+
+module.exports.prescriptionSearch = (searchString,callback) =>{
+  Prescription.find({$or : [{fullname: new RegExp(searchString, 'i')},{pid: new RegExp(searchString, 'i')}]},callback);
+}

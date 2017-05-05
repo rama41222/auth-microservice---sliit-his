@@ -41,11 +41,11 @@ var UserSchema = mongoose.Schema({
   },
   contact : {
 
-      type: Array
+    type: Array
   },
   address : {
 
-      type: Array
+    type: Array
   },
   position : {
     type : String,

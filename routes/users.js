@@ -1,3 +1,4 @@
+"use strict";
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
@@ -5,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const config = require('../config/database');
 const User = require('../models/user');
 const Prescription = require('../models/prescription');
+const Tender = require('../models/tender');
 
 //register a user
 router.post('/register',(req,res,next) => {
@@ -419,5 +421,139 @@ router.post('/authenticate',(req,res,next) => {
     });
 
   });
+
+
+//********* Tender Things [Mayantha] *********//
+
+//Create new tender
+router.post('/tender',(req,res,next)=>{
+    // let TenderID = req.body.tenderid;
+
+    // let tenderid = req.body.tenderid;
+    let drug_id = req.body.drug_id;
+    let drug_name = req.body.drug_name;
+    let drug_categ = req.body.drug_categ;
+    let quantity = req.body.quantity;
+    let description = req.body.description;
+    let status = req.body.status;
+    let t_ex_date = req.body.t_ex_date;
+    let placedby = req.body.placedby;
+
+    //tender id create
+    var date = new Date();
+
+    var tenderid = drug_id.concat('_').concat(date.getFullYear()).concat('_').concat(date.getMonth()).concat('_').concat(date.getDate()).concat('_').concat(date.getHours()).concat('_').concat(date.getMinutes());
+    // tender id = drugid_creatdDateTime
+
+    let newTender = new Tender({
+        tenderid:tenderid,
+        drug_id:drug_id,
+        drug_name:drug_name,
+        drug_categ:drug_categ,
+        quantity : quantity,
+        description : description,
+        status:drug_name,
+        t_ex_date:t_ex_date,
+        t_added_date :new Date(),
+        placedby : placedby,
+    });
+
+    Tender.createTender(newTender,(err, tender)=>{
+        if(err){
+            res.json({success:false, msg:"Failed to create new tender " , err : err});
+
+        } else {
+            res.json({success:true, msg:"New tender created"});
+        }
+    });
+});
+
+//remove tender
+router.delete('/tender/:tenderid',(req,res,next)=>{
+    // if (err) throw err;
+
+    let tenderid = req.params.tenderid;
+    Tender.getTenderById(tenderid,(err, prescription)=>{
+        if (!err) {
+            Tender.removeTender(tenderid, (err, tenderRm) => {
+                if (!err) {
+                    return res.json({success: true, msg: "Successfully Deleted the tender"});
+                } else {
+                    return res.json({success: false, msg: " Tender Can't be Removed due to an Error"});
+                }
+            });
+        } else {
+            res.json({success: false, msg: "Tender Not Found", err: err});
+        }
+    });
+
+});
+
+// Update tender
+router.put('/tender/:tenderid',(req,res,next)=>{
+    let tenderid = req.params.tenderid;
+
+    let drug_id = req.body.drug_id;
+    let drug_name = req.body.drug_name;
+    let drug_categ = req.body.drug_categ;
+    let quantity = req.body.quantity;
+    let description = req.body.description;
+    let status = req.body.status;
+    let t_ex_date = req.body.t_ex_date;
+    let placedby = req.body.placedby;
+
+
+            Tender.getTenderById(tenderid,(err, tender)=>{
+                if(err){
+                    res.json({success:false, msg:"Prescription Not Found" , err : err});
+                } else {
+                    tender.drug_id = drug_id;
+                    tender.drug_name = drug_name;
+                    tender.drug_categ = drug_categ;
+                    tender.quantity = quantity;
+                    tender.description = description;
+                    tender.status = status;
+                    tender.t_ex_date = t_ex_date;
+                    tender.placedby = placedby;
+
+                    Tender.updateTender(tender,(err,tenderUpdated)=>{
+                        if(err) throw err;
+                        if(!tenderUpdated){
+                            return res.json({success:false, msg: " Tender update Error"});
+                        }else{
+                            return res.json({success:true, msg: "Successfully updated the Tender"});
+                        }
+                    });
+                }
+            });
+});
+
+// Get all tender list
+router.get('/tender/list',(req,res,next)=>{
+
+            Tender.getAllTenders((err, tender)=>{
+                if (err) throw err;
+                if(err){
+                    res.json({success:false, msg:"No tenders available " , err : err});
+                }else {
+                    res.json({success:true, tender:tender });
+                }
+            });
+});
+
+// Get tender filtered by id
+router.get('/tender/list/:tenderid',(req,res,next)=>{
+    let tenderid = req.params.tenderid;
+    Tender.getTenderById(tenderid,(err, tender)=>{
+        if (err) throw err;
+        if(err){
+            res.json({success:false, msg:"No tenders available " , err : err});
+        }else {
+            res.json({success:true, tender:tender });
+        }
+    });
+});
+//********* Tender Things *********//
+
 
   module.exports = router;

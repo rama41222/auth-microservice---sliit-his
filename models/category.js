@@ -47,7 +47,7 @@ module.exports.getAllCategories = (callback) => {
 
 module.exports.removeCategory= (_id,callback) => {
 
-  Category.findOneAndRemove(_id,callback);
+  Category.findByIdAndRemove(new mongoose.mongo.ObjectID(_id),callback);
 
 }
 

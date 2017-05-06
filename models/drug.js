@@ -63,7 +63,7 @@ module.exports.getAllDrugs = (callback) => {
 
 module.exports.removeDrug = (_id,callback) => {
 
-  Drug.findOneAndRemove(_id,callback);
+  Drug.findByIdAndRemove(new mongoose.mongo.ObjectID(_id),callback);
 
 }
 

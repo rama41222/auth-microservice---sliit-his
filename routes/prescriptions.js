@@ -52,10 +52,13 @@ router.put('/:_id',(req,res,next)=>{
   let prescription_id = req.params._id;
 
   Prescription.getPrescriptionBy_Id(prescription_id,(err, prescription)=>{
-    if(err){
+
+    if(err) throw err;
+
+    if(!prescription){
       res.json({success:false, msg:"Prescription Not Found" , err : err});
     } else {
-
+      console.log(prescripton)
       var nameArr = [];
       var pid = "p-";
       if(fullname){
@@ -90,12 +93,14 @@ router.put('/:_id',(req,res,next)=>{
 });
 
 // delete a prescription
-router.delete('/',(req,res,next)=>{
+router.delete('/:id',(req,res,next)=>{
 
-  let prescription_id = req.body._id;
+  let prescription_id = req.params.id;
 
   Prescription.getPrescriptionBy_Id(prescription_id,(err, prescription)=>{
-    if(err){
+    if (err) throw err;
+
+    if(!prescription){
       res.json({success:false, msg:"Prescription Not Found" , err : err});
     } else {
 

@@ -44,7 +44,7 @@ router.get('/:searchString',(req,res,next)=>{
 // Update a drug common
 router.put('/:id',(req,res,next)=>{
 
-  let drugId = req.params.drugId;
+  let drugId = req.params.id;
   let name = req.body.name;
   let image = req.body.url;
 
@@ -98,7 +98,7 @@ router.put('/:id',(req,res,next)=>{
 //Remove Drug
 router.delete('/:id',(req,res,next)=>{
 
-  let drugId = req.params.drugId;
+  let drugId = req.params.id;
 
       Drug.getDrugById(drugId,(err,drug) =>{
 

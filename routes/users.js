@@ -358,23 +358,26 @@ router.post('/authenticate',(req,res,next) => {
         let prescription_id = req.params._id;
 
         Prescription.getPrescriptionBy_Id(prescription_id,(err, prescription)=>{
-          if(err){
-            res.json({success:false, msg:"Prescription Not Found" , err : err});
+          if(err) throw err;
+
+          if(!prescription){
+            res.json({success:false, msg:"Prescription Not Found"});
           } else {
 
-            var nameArr = [];
-            var pid = "p-";
+            let nameArr = [];
+            let pid = "p-";
             if(fullname){
               nameArr = fullname.trim().split(" ");
-            }
+           
             for(var i = 0; i < nameArr.length; i++){
               pid = pid + nameArr[i].substring(0,3);
             }
             var d = new Date().getFullYear();
             let birthYear  = d - age;
             pid = pid.toLowerCase()+age+"-"+birthYear;
-
             prescription.pid = pid;
+
+            }
             prescription.fullname = fullname;
             prescription.age = age;
             prescription.created_date = new Date();

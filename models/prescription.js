@@ -57,7 +57,7 @@ module.exports.getPrescriptionBy_Id = (_id, callback)=>{
 
 module.exports.removePrescription = (_id,callback) => {
 
-  Prescription.findOneAndRemove(_id,callback);
+  Prescription.findByIdAndRemove(new mongoose.mongo.ObjectID(_id),callback);
 
 }
 

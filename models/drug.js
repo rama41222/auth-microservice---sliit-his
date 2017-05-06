@@ -61,9 +61,9 @@ module.exports.getAllDrugs = (callback) => {
 
 }
 
-module.exports.removeDrug = (id,callback) => {
+module.exports.removeDrug = (_id,callback) => {
 
-  Drug.findOneAndRemove(id,callback);
+  Drug.findOneAndRemove(_id,callback);
 
 }
 

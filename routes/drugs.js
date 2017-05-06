@@ -12,7 +12,6 @@ router.get('/',(req,res,next)=>{
 
   Drug.getAllDrugs((err,drugs) => {
     if(err) throw err;
-
     if(drugs){
 
       return res.json({success:true, drugList: drugs });
@@ -43,44 +42,94 @@ router.get('/:searchString',(req,res,next)=>{
 });
 
 
+// Update a drug common
+router.put('/:id',(req,res,next)=>{
 
-// Update a drug
-// router.put('/:id',(req,res,next)=>{
-
-// Drug.getDrugById(id,(err,drug) =>{
-
-//     if(err) throw err;
-
-//     if(drug){
-
-//       User.updateDrug(drug,(err, drug)=>{
-//         if(err){
-
-//           res.json({success:false, msg:"Failed to update the drug " ,err : err});
-
-//         } else {
-
-//           res.json({success:true, msg:"Successfully updated the drug"});
-
-//         }
-
-//       });
-
-//     }else{
-
-//       res.json({success:false, msg:"Invalid Drug"});
-
-//     }
-
-//   });
+  let drugId = req.params.drugId;
+  let name = req.body.name;
+  let image = req.body.url;
 
 
 
-// });
+      Drug.getDrugById(drugId,(err,drug) =>{
+
+        if(err) throw err;
+
+        if(drug){
+
+
+
+          let id = "D-";
+
+          let alteredDrugName = name.replace(/\s/g,'');
+
+          for(let i = 0; i < alteredDrugName.length; i++){
+            if(i % 2 == 0){
+              id = id + alteredDrugName[i];
+            }
+          }
+
+          id = id.toUpperCase();
+
+          drug.id = id;
+          drug.name = name;
+          drug.added_date = new Date();
+          drug.image  = image;
+
+          Drug.updateDrug(drug,(err, drug)=>{
+
+            if(err){
+
+              res.json({success:false, msg:"Failed to update the drug " ,err : err});
+
+            } else {
+
+              res.json({success:true, msg:"Successfully updated the drug"});
+
+            }
+
+          });
+
+        }else{
+          res.json({success:false, msg:"Drug not Found"});
+
+        }
+
+      });
+  
+});
 
 //Remove Drug
-router.delete('/',(req,res,next)=>{
+router.delete('/:id',(req,res,next)=>{
 
+  let drugId = req.params.drugId;
+
+      Drug.getDrugById(drugId,(err,drug) =>{
+
+        if(err) throw err;
+
+        if(drug){
+
+          Drug.removeDrug(drug._id,(err, drug)=>{
+
+            if(err){
+
+              res.json({success:false, msg:"Failed to delete the drug " ,err : err});
+
+            } else {
+
+              res.json({success:true, msg:"Successfully deleted the drug"});
+
+            }
+
+          });
+
+        }else{
+          res.json({success:false, msg:"Drug not Found"});
+
+        }
+
+      });
 
 });
 

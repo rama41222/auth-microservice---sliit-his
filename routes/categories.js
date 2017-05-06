@@ -326,7 +326,6 @@ router.put('/:catId/:drugId',(req,res,next)=>{
 
 				}else{
 					res.json({success:false, msg:"Drug not Found"});
-
 				}
 
 			});

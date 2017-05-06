@@ -12,8 +12,7 @@ router.get('/',(req,res,next)=>{
 
   Drug.getAllDrugs((err,drugs) => {
     if(err) throw err;
-    if(drugs){
-
+    if(drugs[0]!= null){
       return res.json({success:true, drugList: drugs });
     }else{
 
@@ -50,14 +49,11 @@ router.put('/:id',(req,res,next)=>{
   let image = req.body.url;
 
 
-
       Drug.getDrugById(drugId,(err,drug) =>{
 
         if(err) throw err;
 
         if(drug){
-
-
 
           let id = "D-";
 

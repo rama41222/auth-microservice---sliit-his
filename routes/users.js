@@ -45,7 +45,7 @@ router.post('/register',(req,res,next) => {
     password : req.body.password,
     email : emailString,
   });
-  
+
   //Getting all users by username
   User.getUserByUsername(unameString,(err,user) =>{
 
@@ -154,19 +154,16 @@ router.post('/authenticate',(req,res,next) => {
   });
 
   //update an existing user
-  router.put('/:username',(req,res,next) => {
-    let username = req.params.username;
-    User.getUserByUsername(username,(err,user)=>{
+  router.put('/:id',(req,res,next) => {
+    let id = req.params.id;
+    User.getUserById(id,(err,user)=>{
 
       if(err) throw err;
-
-      if(!user){
-        return res.json({success:false, msg: "User not found!"});
-
-      }
-
+     
+      if(user){
+      
       user.fullname = req.body.fullname;
-      user.surname = req.body.surname;
+      user.surname = req.body.surname;  
       user.dob = req.body.dob;
       user.doj = new Date();
       user.sex = req.body.sex;
@@ -181,6 +178,7 @@ router.post('/authenticate',(req,res,next) => {
 
       User.updateUser(user,(err,updatedUser)=>{
         if(err){
+          console.log(err);
           return res.json({success:false, msg: "User not found!"});
         }else{
 
@@ -188,17 +186,30 @@ router.post('/authenticate',(req,res,next) => {
         }
 
       });
+      }else{
+
+        return res.json({success:false, msg: "User not found!"});
+
+      
+    }
 
     });
 
   });
 
   //Delete an exisitng user
-  router.delete('/',(req,res,next) => {
-    let username = req.body.username;
-    User.removeUser(username,(err,user) => {
+  router.delete('/:id',(req,res,next) => {
+    let id = req.params.id;
+    
+    User.getUserById(id,(err,user)=>{
 
       if(err) throw err;
+
+      if(user){
+
+     User.removeUser(id,(err,user) => {
+      if(err) throw err;
+      
       if(user){
         return res.json({success:true, msg: "User Removed Successfully!"});
       }else{
@@ -206,6 +217,13 @@ router.post('/authenticate',(req,res,next) => {
 
       }
     });
+
+      }else{
+          return res.json({success:false, msg: "Invalid user"});
+      }
+    });
+
+    
 
   });
 
@@ -384,7 +402,7 @@ router.post('/authenticate',(req,res,next) => {
   });
 
   //Delete a prescription created by a user
-  router.delete('/:username/prescriptions',(req,res,next)=>{
+  router.delete('/:username/prescriptions/:id',(req,res,next)=>{
 
     let username = req.params.username;
 
@@ -395,7 +413,7 @@ router.post('/authenticate',(req,res,next) => {
       if(user){
 
         let user_id = user._id;
-        let prescription_id = req.body._id;
+        let prescription_id = req.params.id;
 
         Prescription.getPrescriptionBy_Id(prescription_id,(err, prescription)=>{
           if(err){

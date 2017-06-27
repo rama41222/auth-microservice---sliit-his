@@ -109,9 +109,7 @@ module.exports.addUser = (newUser, callback) =>{
 
 }
 module.exports.removeUser = (id,callback) => {
-  //let query = { _id : };
-  console.log(id);
-  
+ 
   User.findByIdAndRemove(new mongoose.mongo.ObjectID(id),callback);
 
 }

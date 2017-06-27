@@ -5,6 +5,9 @@ const jwt = require('jsonwebtoken');
 const config = require('../config/database');
 const User = require('../models/user');
 const Prescription = require('../models/prescription');
+//things from mayantha
+const Tender = require('../models/tender');
+const Order = require('../models/order');
 
 //register a user
 router.post('/register',(req,res,next) => {
@@ -59,7 +62,7 @@ router.post('/register',(req,res,next) => {
 
         } else {
 
-          res.json({success:true, msg:"Successfully Registered the User"});
+          res.json({success:true, msg:"Successfully Registered the User", status:res.status});
 
 
         }
@@ -440,5 +443,290 @@ router.post('/authenticate',(req,res,next) => {
     });
 
   });
+
+  //********* Tender Things [Mayantha] *********//
+
+//Create new tender
+router.post('/tender',(req,res,next)=>{
+    // let TenderID = req.body.tenderid;
+
+    // let tenderid = req.body.tenderid;
+    let drug_id = req.body.drug_id;
+    let drug_name = req.body.drug_name;
+    let drug_categ = req.body.drug_categ;
+    let quantity = req.body.quantity;
+    let description = req.body.description;
+    let status = req.body.status;
+    let t_ex_date = req.body.t_ex_date;
+    let placedby = req.body.placedby;
+
+    //tender id create
+    var date = new Date();
+
+    var tenderid = drug_id.concat('_').concat(date.getFullYear()).concat('_').concat(date.getMonth()).concat('_').concat(date.getDate()).concat('_').concat(date.getHours()).concat('_').concat(date.getMinutes());
+    // tender id = drugid_creatdDateTime
+
+    let newTender = new Tender({
+        tenderid:tenderid,
+        drug_id:drug_id,
+        drug_name:drug_name,
+        drug_categ:drug_categ,
+        quantity : quantity,
+        description : description,
+        status:drug_name,
+        t_ex_date:t_ex_date,
+        t_added_date :new Date(),
+        placedby : placedby,
+    });
+
+    Tender.createTender(newTender,(err, tender)=>{
+        if(err){
+            res.json({success:false, msg:"Failed to create new tender " , err : err});
+
+        } else {
+            res.json({success:true, msg:"New tender created"});
+        }
+    });
+});
+
+//remove tender
+router.delete('/tender/:tenderid',(req,res,next)=>{
+    // if (err) throw err;
+
+    let tenderid = req.params.tenderid;
+    Tender.getTenderById(tenderid,(err, prescription)=>{
+        if (!err) {
+            Tender.removeTender(tenderid, (err, tenderRm) => {
+                if (!err) {
+                    return res.json({success: true, msg: "Successfully Deleted the tender"});
+                } else {
+                    return res.json({success: false, msg: " Tender Can't be Removed due to an Error"});
+                }
+            });
+        } else {
+            res.json({success: false, msg: "Tender Not Found", err: err});
+        }
+    });
+
+});
+
+// Update tender
+router.put('/tender/:tenderid',(req,res,next)=>{
+    let tenderid = req.params.tenderid;
+
+    let drug_id = req.body.drug_id;
+    let drug_name = req.body.drug_name;
+    let drug_categ = req.body.drug_categ;
+    let quantity = req.body.quantity;
+    let description = req.body.description;
+    let status = req.body.status;
+    let t_ex_date = req.body.t_ex_date;
+    let placedby = req.body.placedby;
+
+
+            Tender.getTenderById(tenderid,(err, tender)=>{
+                if(err){
+                    res.json({success:false, msg:"Prescription Not Found" , err : err});
+                } else {
+
+                    tender.drug_id = drug_id;
+                    tender.drug_name = drug_name;
+                    tender.drug_categ = drug_categ;
+                    tender.quantity = quantity;
+                    tender.description = description;
+                    tender.status = status;
+                    tender.t_ex_date = t_ex_date;
+                    tender.placedby = placedby;
+
+                    Tender.updateTender(tender,(err,tenderUpdated)=>{
+                        if(err) throw err;
+                        if(!tenderUpdated){
+                            return res.json({success:false, msg: " Tender update Error"});
+                        }else{
+                            return res.json({success:true, msg: "Successfully updated the Tender"});
+                        }
+                    });
+                }
+            });
+});
+
+// Get all tender list
+router.get('/tender/list',(req,res,next)=>{
+
+            Tender.getAllTenders((err, tender)=>{
+                if (err) throw err;
+                if(err){
+                    res.json({success:false, msg:"No tenders available " , err : err});
+                }else {
+                    res.json({success:true, tender:tender });
+                }
+            });
+});
+
+// Get tender filtered by id
+router.get('/tender/list/:tenderid',(req,res,next)=>{
+    let tenderid = req.params.tenderid;
+    Tender.getTenderById(tenderid,(err, tender)=>{
+        if (err) throw err;
+        if(err){
+            res.json({success:false, msg:"No tenders available " , err : err});
+        }else {
+            res.json({success:true, tender:tender });
+        }
+    });
+});
+//********* Tender Things *********//
+
+//*********  Purchase OrderThings [Mayantha] *********//
+
+//Create new  Purchase Order
+router.post('/purchaseorder',(req,res,next)=>{
+    // let TenderID = req.body.tenderid;
+
+    // let tenderid = req.body.tenderid;
+    let tenderid = req.body.tenderid;
+    let quotationid = req.body.quotationid;
+    let supplierid = req.body.supplierid;
+    let placedby = req.body.placedby;
+    let status = req.body.status;
+    let order_dispatched_date = req.body.order_dispatched_date;
+    let order_completed_date = req.body.order_completed_date;
+
+    //tender id create
+    var date = new Date();
+
+    var orderid = quotationid.concat('_').concat(date.getFullYear()).concat('_').concat(date.getMonth()).concat('_').concat(date.getDate()).concat('_').concat(date.getHours()).concat('_').concat(date.getMinutes());
+    // tender id = drugid_creatdDateTime
+
+    let newOrder = new Order({
+        orderid:orderid,
+        tenderid:tenderid,
+        quotationid:quotationid,
+        supplierid:supplierid,
+        placedby:placedby,
+        order_placed_date:date,
+        status : status,
+        order_dispatched_date : order_dispatched_date,
+        order_completed_date:order_completed_date,
+
+    });
+
+    Order.createPurchaseOrder(newOrder,(err, purorder)=>{
+        if(err){
+            res.json({success:false, msg:"Failed to create new puchase order " , err : err});
+
+        } else {
+            res.json({success:true, msg:"New  puchase order created"});
+        }
+    });
+});
+
+//remove  Purchase Order
+router.delete('/purchaseorder/:orderid',(req,res,next)=>{
+    // if (err) throw err;
+
+    let orderid = req.params.orderid;
+    Order.getPurchaseOrderById(orderid,(err, order)=>{
+        if (!err) {
+            Order.removePurchaseOrder(orderid, (err, purOrderRm) => {
+                if (!err) {
+                    return res.json({success: true, msg: "Successfully Deleted the puchase order"});
+                } else {
+                    return res.json({success: false, msg: " puchase order Can't be Removed due to an Error"});
+                }
+            });
+        } else {
+            res.json({success: false, msg: "puchase order Not Found", err: err});
+        }
+    });
+
+});
+
+// Update  Purchase Order
+router.put('/purchaseorder/:orderid',(req,res,next)=>{
+    let orderid = req.params.orderid;
+
+    let tenderid = req.body.tenderid;
+    let quotationid = req.body.quotationid;
+    let supplierid = req.body.supplierid;
+    let status = req.body.status;
+    let order_dispatched_date = req.body.order_dispatched_date;
+    let order_completed_date = req.body.order_completed_date;
+
+    Order.getPurchaseOrderById(orderid,(err, order)=>{
+        if(err){
+            res.json({success:false, msg:"Purchase Order Not Found" , err : err});
+        } else {
+
+            order.tenderid = tenderid;
+            order.quotationid = quotationid;
+            order.supplierid = supplierid;
+            order.status = status;
+            order.order_dispatched_date = order_dispatched_date;
+            order.order_completed_date = order_completed_date;
+
+            Order.updatePurchaseOrder(order,(err,orderUpdated)=>{
+                if(err) throw err;
+                if(!orderUpdated){
+                    return res.json({success:false, msg: " Purchase Order update Error"});
+                }else{
+                    return res.json({success:true, msg: "Successfully updated the Purchase Order"});
+                }
+            });
+        }
+    });
+});
+
+// Update  Purchase Order status
+router.put('/purchaseorder/changestate/:orderid',(req,res,next)=>{
+    let orderid = req.params.orderid;
+
+    let status = req.body.status;
+
+    Order.getPurchaseOrderById(orderid,(err, order)=>{
+        if(err){
+            res.json({success:false, msg:"Purchase Order Not Found" , err : err});
+        } else {
+
+            order.status = status;
+
+            Order.updatePurchaseOrderStatus(order,(err,orderUpdated)=>{
+                if(err) throw err;
+                if(!orderUpdated){
+                    return res.json({success:false, msg: " Status of the Purchase Order update Error"});
+                }else{
+                    return res.json({success:true, msg: "Successfully updated the Purchase Order status"});
+                }
+            });
+        }
+    });
+});
+
+// Get all  Purchase Order list
+router.get('/purchaseorder/list',(req,res,next)=>{
+
+    Order.getAllPurchaseOrders((err, tender)=>{
+        if (err) throw err;
+        if(err){
+            res.json({success:false, msg:"No purchase orers available " , err : err});
+        }else {
+            res.json({success:true, tender:tender });
+        }
+    });
+});
+
+// Get  Purchase Order filtered by id
+router.get('/purchaseorder/list/:orderid',(req,res,next)=>{
+    let orderid = req.params.orderid;
+    Order.getPurchaseOrderById(orderid,(err, tender)=>{
+        if (err) throw err;
+        if(err){
+            res.json({success:false, msg:"No purchase orers available " , err : err});
+        }else {
+            res.json({success:true, tender:tender });
+        }
+    });
+});
+//********* Purchase Order Things *********//
 
   module.exports = router;

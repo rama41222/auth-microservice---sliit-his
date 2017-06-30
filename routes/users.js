@@ -89,8 +89,7 @@ router.post('/authenticate',(req,res,next) => {
     if(err) throw err;
 
     if(!user){
-      return res.json({success:false, msg: "User not found!"});
-
+      return res.status(500).json({success:false,msg:"User Not Found!"});
     }
 
     User.comparePassword(password,user.password, (err,isMatch)=>{
@@ -116,7 +115,7 @@ router.post('/authenticate',(req,res,next) => {
 
         }else{
 
-          res.json({success:false, msg: "Wrong password"});
+          return res.status(500).json({success:false,msg:"Wrong Password"});
 
         }
       });

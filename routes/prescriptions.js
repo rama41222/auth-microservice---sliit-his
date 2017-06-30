@@ -14,9 +14,9 @@ router.get('/',(req,res,next)=>{
     if(err) throw err;
 
     if(prescriptions){
-      return res.json({success:true, prescriptionsList: prescriptions });
+      return res.status(200).json({success:true, prescriptionsList: prescriptions });
     }else{
-      return res.json({success:false, msg : "No prescriptons to display"});
+      return res.status(500).json({success:false,msg:"No Prescriptions found!"});
     }
 
   });

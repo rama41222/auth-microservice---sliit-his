@@ -22,7 +22,7 @@ var PrescriptionSchema = mongoose.Schema({
     required : true
   },
   prescribed_drugs : [{
-      drug: { type: String, lowercase: true, trim: true },
+      dname: { type: String, lowercase: true, trim: true },
       frequency: { type: String, trim: true },
       period : { type: String, trim: true}
   }],

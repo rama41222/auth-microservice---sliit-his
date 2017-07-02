@@ -45,10 +45,11 @@ router.post('/',(req,res,next)=>{
 
 
   let newBatch=new Batch({
- 
+
     createdDate:createdDate,
     drugId:drugId,
     name:name,
+    quantity:0,
     alertlevel:100
   });
   Batch.getBatchByName(name,(err,batch)=>{
@@ -79,15 +80,19 @@ router.put('/:id',(req,res,next)=>{
     Batch.getBatchById(batchId,(err,batch) =>{
 
     batch.createdDate= new Date();
-    batch.quantity=req.body.quantity;
+    batch.quantity=req.body.quantity + batch.quantity;
     batch.alertlevel = req.body.alertlevel;
+    batch.stockId.push(req.body.stockId);
  
+ console.log(batch);
 
-        Batch.updateBatch(batch._id,(err,newBatch)=>{
-          if(!err){
-            res.json({success:true, msg:"Batch is Successfully updated"});
+        Batch.updateBatch(batch,(err,newBatch)=>{
+          if(err){
+            console.log(err)
+            res.status(500).json({success:false, msg:"Batch is not updated" , err : err});
           } else {
-            res.json({success:false, msg:"Batch is not updated" , err : err});
+             res.status(200).json({success:true, msg:"Batch is Successfully updated"});
+            
           }
 
         });

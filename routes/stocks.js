@@ -69,11 +69,12 @@ router.get('/:searchStockID',(req,res,next)=>{
     Stock.addStock(newStock,(err, stock)=>{
       if(err){
 
-        res.json({success:false, msg:"Failed to add stock " ,err : err});
+        console.log(err)
+        res.status(500).json({success:false, msg:"Failed to add stock " ,err : err});
 
       } else {
-
-        res.json({success:true, msg:"Successfully added a stock to the database!!!"});
+        console.log(stock)
+        res.json({success:true, msg:"Successfully added a stock to the database!!!", stock:stock});
 
       }
 

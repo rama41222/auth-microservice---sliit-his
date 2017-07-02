@@ -13,7 +13,7 @@ var StockSchema = mongoose.Schema({
     required : true
   },
   exp:{
-    type:Number,
+    type:Date,
     required: true
   },
   batchID :{

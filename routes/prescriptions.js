@@ -117,11 +117,11 @@ router.delete('/:id',(req,res,next)=>{
 
 });
 
-router.put('/:_id/dispense',(req,res,next)=>{
+// router.put('/:_id/dispense',(req,res,next)=>{
+//   let pres_id = req.body.
 
 
-
-});
+// });
 
 
 module.exports = router;

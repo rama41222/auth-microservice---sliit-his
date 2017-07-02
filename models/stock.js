@@ -12,9 +12,13 @@ var StockSchema = mongoose.Schema({
     type : Number,
     required : true
   },
-  StockLevel : {
-    type : Number,
-    required : true
+  exp:{
+    type:Number,
+    required: true
+  },
+  batchID :{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'batches'
   }
 
 });

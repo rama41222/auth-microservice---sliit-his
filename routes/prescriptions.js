@@ -117,4 +117,11 @@ router.delete('/:id',(req,res,next)=>{
 
 });
 
+router.put('/:_id/dispense',(req,res,next)=>{
+
+
+
+});
+
+
 module.exports = router;

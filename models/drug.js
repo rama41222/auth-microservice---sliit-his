@@ -9,7 +9,7 @@ var DrugSchema = mongoose.Schema({
     required : true
 
   },
-  name : {
+  dname : {
     type : String,
     required : true
 
@@ -54,6 +54,13 @@ module.exports.getDrugsByName = (name, callback)=>{
   let query = { name : name };
   Drug.find(query,callback);
 }
+
+module.exports.getDrugsByDID = (did, callback)=>{
+
+  let query = { id : did };
+  Drug.findOne(query,callback);
+}
+
 
 module.exports.getAllDrugs = (callback) => {
 

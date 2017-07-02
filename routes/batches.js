@@ -38,35 +38,30 @@ Batch.getBatchById(searchBatchID,(err,batches)=>{
 
 
 router.post('/',(req,res,next)=>{
-  let batchId=req.body.batchId;
-  let createdDate = req.body.createdDate;
-  let quantity = req.body.quantity;
-  let expiryDate = req.body.expiryDate;
+
+  let createdDate = new Date();
   let drugId = req.body.drugId;
-  let stockId = req.body.stockId;
-  let weight = req.body.weight;
   let name = req.body.name;
+
+
   let newBatch=new Batch({
-    batchId:batchId,
+ 
     createdDate:createdDate,
-    quantity:quantity,
-    expiryDate:expiryDate,
     drugId:drugId,
-    stockId:stockId,
-    weight:weight,
     name:name
   });
-  Batch.getBatchById(batchId,(err,batch)=>{
+  Batch.getBatchByName(name,(err,batch)=>{
       if(err)throw err;
-      if(batch==null)
+
+      if(!batch)
       {
         Batch.addBatch(newBatch,(err,stock)=>{
             if(err)
             {
-              res.json({success:false,msg:"Failed to add a batch to DB",err:err});
+              res.status(500).json({success:false,msg:"Failed to add a batch to DB",err:err});
             }
             else{
-              res.json({success:true,msg:"Successfully added to database new batch"});
+              res.status(200).json({success:true,msg:"Successfully added to database new batch"});
             }
 
         });
@@ -77,15 +72,16 @@ router.post('/',(req,res,next)=>{
       }
   })
 });
-router.put('/:BatchId',(req,res,next)=>{
-  let batchId=req.params.BatchId;
+router.put('/:id',(req,res,next)=>{
+    let batchId=req.params.id;
+    
     Batch.getBatchById(batchId,(err,batch) =>{
-    batch.createdDate=req.body.createdDate;
+
+    batch.createdDate= new Date();
     batch.quantity=req.body.quantity;
-    batch.expiryDate=req.body.expiryDate;
-    //  batch.StockLevel=req.body.quantity;
-      // stock.DrugID=req.body.DrugID;
-        Batch.updateBatch(batch,(err,newBatch)=>{
+ 
+
+        Batch.updateBatch(batch._id,(err,newBatch)=>{
           if(!err){
             res.json({success:true, msg:"Batch is Successfully updated"});
           } else {
@@ -97,9 +93,9 @@ router.put('/:BatchId',(req,res,next)=>{
 
 });
 
-router.delete('/:batchId',(req,res,next)=>{
-let batchId=req.params.batchId;
-Batch.deleteBatch(batchId,(err,batch)=>{
+router.delete('/:id',(req,res,next)=>{
+let id=req.params.id;
+Batch.deleteBatch(id,(err,batch)=>{
 
   if(err)throw err;
   if(batch){

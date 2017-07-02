@@ -37,25 +37,19 @@ Stock.getStockById(searchStockID,(err,stocks)=>{
 });
 //To add stock details
 router.post('/',(req,res,next)=>{
-  let StockId = req.body.StockId;
-  let DrugID = req.body.DrugID;
+  let DrugID = req.body.DrugId;
   let TotalQuantity = req.body.TotalQuantity;
   let StockLevel = req.body.StockLevel;
 
 let newStock=new Stock({
-StockId:StockId,
 DrugID:DrugID,
 TotalQuantity:TotalQuantity,
 StockLevel:StockLevel
 //StockName:StockName,
 
 });
-  Stock.getStockById(StockId,(err,stock) =>{
-
-    if(err) throw err;
-    console.log(err+" "+stock+" "+DrugID+" "+TotalQuantity+" "+StockLevel);
-    if(stock == null){
-      console.log(newStock)
+ 
+   
       Stock.addStock(newStock,(err, stock)=>{
         if(err){
 
@@ -69,18 +63,12 @@ StockLevel:StockLevel
 
       });
 
-    }else{
-      res.json({success:false, msg:"This Stock is already presented in Database.If you want to change use update method"});
-
-    }
-
-  });
-
+  
 });
 
 //Upadte stock details
-router.put('/:StockId',(req,res,next)=>{
-  let stockId=req.params.StockId;
+router.put('/:id',(req,res,next)=>{
+  let stockId=req.params.id;
     Stock.getStockById(stockId,(err,stock) =>{
       stock.TotalQuantity=req.body.TotalQuantity;
       stock.StockLevel=req.body.StockLevel;

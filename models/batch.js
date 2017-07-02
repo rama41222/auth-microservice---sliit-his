@@ -11,6 +11,9 @@ var batchSchema=mongoose.Schema({
       quantity:{
         type:Number,
       },
+      alertlevel:{
+        type:Number,
+      },
      name:{
         type:String,
         required:true

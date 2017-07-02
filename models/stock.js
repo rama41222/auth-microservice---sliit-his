@@ -4,14 +4,10 @@ const config = require('../config/database');
 
 var StockSchema = mongoose.Schema({
 
-  StockId : {
-    type : String,
-    required : true
+  DrugID : {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'drugs'
   },
-  // DrugID : {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: 'drugs'
-  // },
   TotalQuantity : {
     type : Number,
     required : true
@@ -35,8 +31,8 @@ module.exports.deleteStock = (stockId,callback) => {
 }
 //to get stock details by stock id
 module.exports.getStockById = (StockId, callback)=>{
-  let value = { StockId : StockId };
-  Stock.findOne(value,callback);
+
+  Stock.findById(StockId,callback);
 }
 //To get all stock details
  module.exports.getAllStocks=(callback)=>{

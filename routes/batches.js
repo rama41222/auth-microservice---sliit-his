@@ -48,7 +48,8 @@ router.post('/',(req,res,next)=>{
  
     createdDate:createdDate,
     drugId:drugId,
-    name:name
+    name:name,
+    alertlevel:100
   });
   Batch.getBatchByName(name,(err,batch)=>{
       if(err)throw err;
@@ -74,11 +75,12 @@ router.post('/',(req,res,next)=>{
 });
 router.put('/:id',(req,res,next)=>{
     let batchId=req.params.id;
-    
+
     Batch.getBatchById(batchId,(err,batch) =>{
 
     batch.createdDate= new Date();
     batch.quantity=req.body.quantity;
+    batch.alertlevel = req.body.alertlevel;
  
 
         Batch.updateBatch(batch._id,(err,newBatch)=>{

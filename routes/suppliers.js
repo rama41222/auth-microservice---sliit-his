@@ -1,13 +1,62 @@
 const express=require('express');
 const router=express.Router();
 const mongoose=require('mongoose');
-//const bcrypt=require('bcrypt');
+const bcrypt=require('bcrypt');
 
 const Supplier=require('../models/supplier.js');
 
 const Quotation=require('../models/quotation.js');
 
 const Order=require('../models/order.js');
+
+const passport = require('passport-jwt');
+const jwt = require('jsonwebtoken');
+
+//authenticate supplier
+router.post('/suppliers/authenticate',(req,res,next) => {
+
+  const email= req.body.email;
+  const password = req.body.password;
+  Supplier.getSupplierByID(email, (err,supplier) =>{
+
+    if(err){
+      console.error(err);
+    }
+
+    if(!supplier){
+      return res.status(500).json({success:false,msg:"Supplier Not Found!"});
+    }
+
+    Supplier.validatePassword(password,supplier.password, (err, matches)=>{
+
+      if(err){
+        console(err);
+      }
+
+      if(matches){
+        const token = jwt.sign(supplier, config.secret,{
+          expiresIn: 604800
+        });
+
+        res.json({
+          success:true,
+          token : 'JWT '+token,
+          supplier : {
+            id : supplier._id,
+            name : supplier.name,
+            email : supplier.email
+          },
+          mgs:"Login Success"});
+
+        }else{
+
+          return res.status(500).json({success:false,msg:"Wrong Password"});
+
+        }
+      });
+    });
+
+  });
 
 //register new supplier
 router.post('/', (req, res, next)=>{
@@ -17,13 +66,15 @@ router.post('/', (req, res, next)=>{
 
    //bcrypt.compareSync()
 
+   var hash=Supplier.generateHash(req.body.password);
+
    var newSupplier=new Supplier({
       name:req.body.name,
       email:req.body.email,
       tel:req.body.tel,
       companyName:req.body.companyName,
       country:req.body.country,
-      password:req.body.password
+      password:hash
     });
 
     Supplier.addSupplier(newSupplier, (err, newSupplier)=>{
@@ -85,8 +136,8 @@ router.get('/:email', (req, res, next)=>{
 });
 
 //get quotations of a particular supplier
-router.get('/:email/quotations', (req, res, next)=>{
-  Quotation.getAllQuotations((err, quotations)=>{
+router.get('/:supplierid/quotations', (req, res, next)=>{
+  Quotation.getAllQuotations(req.params.supplierid, (err, quotations)=>{
     if(err){
       console.error(err);
       res.sendStatus(500);

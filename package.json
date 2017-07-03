@@ -24,6 +24,8 @@
   },
   "homepage": "https://github.com/rama41222/auth-microservice---sliit-his#readme",
   "dependencies": {
+    "angular": "^1.6.4",
+    "bcrypt": "^1.0.2",
     "bcryptjs": "^2.4.3",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",

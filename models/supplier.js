@@ -1,5 +1,5 @@
 const mongoose=require('mongoose');
-//const bcrypt=require('bcrypt');
+const bcrypt=require('bcrypt');
 
 const SupplierSchema=new mongoose.Schema({
   name:{
@@ -26,7 +26,11 @@ const SupplierSchema=new mongoose.Schema({
   password:{
     type:String,
     required:true
-  }
+  }/*,
+  quotations:[{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:'Quotation'
+  }]*/
 });
 
 const Supplier=mongoose.model('Supplier', SupplierSchema);
@@ -34,11 +38,11 @@ const Supplier=mongoose.model('Supplier', SupplierSchema);
 module.exports=Supplier;
 
 module.exports.generateHash=function(password){
-  return bcrypt.hashSync(password, bcrypt.genSaltSync(9));
+  return bcrypt.hashSync(password, bcrypt.genSaltSync(1));
 };
 
-module.exports.validatePassword=function(password){
-  return bcrypt.compareSync(password, this.local.password);
+module.exports.validatePassword=function(password, existingSupplierPassword){
+  return bcrypt.compareSync(password, existingSupplierPassword);
 };
 
 module.exports.addSupplier=(newSupplier, callback)=>{

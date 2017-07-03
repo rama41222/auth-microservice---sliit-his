@@ -1,18 +1,18 @@
 const mongoose=require('mongoose');
 
 const QuotationSchema=new mongoose.Schema({
-  quotationid:{
+  /*quotationid:{
      type : String,
      required : true
-  },
+  },*/
   tenderid:{
      type: String,//mongoose.Schema.Types.ObjectId,
      //ref: 'Tender',
      required: true
   },
   supplierid:{
-     type: String,//mongoose.Schema.Types.ObjectId,
-    // ref: 'Supplier',
+     type: mongoose.Schema.Types.ObjectId,
+     ref: 'Supplier',
      required: true
   },
   quotation_placed_date:{
@@ -41,8 +41,8 @@ module.exports.addQuotation=(newQuotation, callback)=>{
   newQuotation.save(callback);
 };
 
-module.exports.getAllQuotations=(callback)=>{
-  Quotation.find(callback);
+module.exports.getAllQuotations=(sid, callback)=>{
+  Quotation.find({"supplierid":sid}, callback);
 };
 
 module.exports.getQuotationByID=(id, callback)=>{

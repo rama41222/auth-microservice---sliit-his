@@ -39,6 +39,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 require('./config/passport')(passport);
 
+app.use(passport.initialize());
+app.use(passport.session());
+require('./config/supplierpassport')(passport);
+
 const users = require('./routes/users');
 const drugs = require('./routes/drugs');
 const prescriptions = require('./routes/prescriptions');

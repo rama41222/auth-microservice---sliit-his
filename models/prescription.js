@@ -24,15 +24,21 @@ var PrescriptionSchema = mongoose.Schema({
   prescribed_drugs : [{
       dname: { type: String, lowercase: true, trim: true },
       frequency: { type: String, trim: true },
-      period : { type: String, trim: true},
-      isDispensed : false
-  }],
+      period : { type: String, trim: true}
+    }],
   physician : {
 
      type: mongoose.Schema.Types.ObjectId,
      ref: 'Users'
 
-  }
+  },history : [{
+      drug : { 
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'drugs'
+      },
+      qty: { type: String, trim: true },
+      date : { type: Date}
+    }]
 
 });
 

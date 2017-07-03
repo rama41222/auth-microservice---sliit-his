@@ -92,6 +92,53 @@ router.put('/:_id',(req,res,next)=>{
 
 });
 
+// history : [{
+//       drug : { 
+//         type: mongoose.Schema.Types.ObjectId,
+//         ref: 'drugs'
+//       },
+//       qty: { type: String, trim: true },
+//       date : { type: Date}
+//     }]
+
+router.put('/history/:id',(req,res,next)=>{
+
+  // let drugid = req.body.did;
+  // let qty = req.body.qty;
+  // let date = new Date();
+
+  let prescription_id = req.params.id;
+
+  let history = req.body.history;
+
+  Prescription.getPrescriptionBy_Id(prescription_id,(err, prescription)=>{
+
+    if(err) throw err;
+
+    if(prescription){
+
+      prescription.history.push(history);
+
+      Prescription.updatePrescription(prescription,(err,updatedPrescription)=>{
+        if(err){
+          return res.status(500).json({success:false, msg: "Prescription update Error"});
+        }else{
+          return res.status(200).json({success:true, msg: "Successfully updated the prescription"});
+        }
+
+      });
+
+
+      
+    } else {
+        res.status(500).json({success:false, msg:"Prescription Not Found" , err : err});
+    }
+
+  });
+
+});
+
+
 // delete a prescription
 router.delete('/:id',(req,res,next)=>{
 

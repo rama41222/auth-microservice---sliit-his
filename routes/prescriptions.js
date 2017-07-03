@@ -127,8 +127,6 @@ router.put('/history/:id',(req,res,next)=>{
         }
 
       });
-
-
       
     } else {
         res.status(500).json({success:false, msg:"Prescription Not Found" , err : err});

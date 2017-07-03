@@ -109,7 +109,7 @@ router.put('/history/:id',(req,res,next)=>{
 
   let prescription_id = req.params.id;
 
-  let history = req.body.history;
+  let history = req.body;
 
   Prescription.getPrescriptionBy_Id(prescription_id,(err, prescription)=>{
 
@@ -117,7 +117,9 @@ router.put('/history/:id',(req,res,next)=>{
 
     if(prescription){
 
-      prescription.history.push(history);
+      for(var i = 0; i < history.length;i++){
+         prescription.history.push(history[i]);
+      }
 
       Prescription.updatePrescription(prescription,(err,updatedPrescription)=>{
         if(err){

@@ -40,6 +40,14 @@ module.exports.getBatchByName = (name, callback)=>{
   let value = { name : name };
   batch.findOne(value,callback);
 }
+
+module.exports.getBatchByDrugId= (did, callback)=>{
+  
+  let value = { drugId : did };
+  batch.findOne(value,callback);
+  
+}
+
 //To add new batch to data base
 module.exports.addBatch = (newBatch,callback) => {
   newBatch.save(callback);

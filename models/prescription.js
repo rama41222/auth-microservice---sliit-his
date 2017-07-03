@@ -36,6 +36,7 @@ var PrescriptionSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'drugs'
       },
+      dname:{type: String, trim:true},
       qty: { type: String, trim: true },
       date : { type: Date}
     }]

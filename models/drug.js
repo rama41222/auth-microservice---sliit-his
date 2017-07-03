@@ -44,8 +44,8 @@ module.exports.updateDrug = (updatedDrug,callback) => {
 }
 module.exports.getDrugById = (id, callback)=>{
 
-  let query = { id : id };
-  Drug.findOne(query,callback);
+  let query = { _id : id };
+  Drug.findById(query,callback);
 
 }
 

@@ -32,7 +32,7 @@ var PrescriptionSchema = mongoose.Schema({
      ref: 'Users'
 
   },history : [{
-      drug : { 
+      drug_id : { 
         type: mongoose.Schema.Types.ObjectId,
         ref: 'drugs'
       },

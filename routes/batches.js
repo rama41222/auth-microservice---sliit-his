@@ -45,28 +45,6 @@ router.get('/quantity/:did',(req,res,next)=>{
 });
 
 
-router.put('/quantity/',(req,res,next)=>{
-
-    let drugId = req.params.did;
-    console.log(drugId);
-      Batch.getBatchByDrugId(drugId,(err,batch)=>{
-        if(err)throw err;
-
-        if(batch)
-        {
-
-          res.status(200).json({success:true,qty : batch.quantity});
-        }
-        else{
-          res.status(500).json({success:false,msg:"Stocks not found"});
-        }
-      });
-
-
-
-
-});
-
 //To get stock details by stock id
 router.get('/:searchBatchID',(req,res,next)=>{
   let searchBatchID=req.params.searchBatchID;
@@ -138,7 +116,7 @@ router.post('/',(req,res,next)=>{
 router.put('/:id',(req,res,next)=>{
   let batchId=req.params.id;
 
-  Batch.getBatchById(batchId,(err,batch) =>{
+   Batch.getBatchById(batchId,(err,batch) =>{
 
     batch.createdDate= new Date();
     batch.quantity=req.body.quantity + batch.quantity;

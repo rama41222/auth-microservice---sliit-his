@@ -46,6 +46,7 @@ const categories = require('./routes/categories');
 const suppliers=require('./routes/suppliers.js');
 const stocks = require('./routes/stocks');
 const batches = require('./routes/batches');
+const batchservice = require('./routes/batchservice');
 
 //add routes
 app.use('/users',users);
@@ -55,6 +56,7 @@ app.use('/categories',categories);
 app.use('/suppliers', suppliers);
 app.use('/stocks',stocks);
 app.use('/batches',batches);
+app.use('/batchservice',batchservice);
 //default route
 app.get('/',(req,res) => {
 	res.json({"api":"sliit his pharmacy module api v1.0.0"});

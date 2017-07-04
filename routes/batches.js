@@ -45,6 +45,41 @@ router.get('/quantity/:did',(req,res,next)=>{
 });
 
 
+router.put('/quantity/:did',(req,res,next)=>{
+
+      let drugId = req.params.did;
+      let qty = req.body.qty;
+  
+      Batch.getBatchByDrugId(drugId,(err,batch)=>{
+        if(err)throw err;
+
+        if(batch)
+        {
+
+            batch.quantity = batch.quantity - qty;
+
+            Batch.updateBatch(batch,(err,newBatch)=>{
+              if(err){
+                console.log(err)
+                res.status(500).json({success:false, msg:"Batch is not updated" , err : err});
+              } else {
+               res.status(200).json({success:true, msg:"Batch is Successfully updated"});
+
+             }
+
+           });
+       ;
+        }
+        else{
+          res.status(500).json({success:false,msg:"Stocks not found"});
+        }
+      });
+
+
+
+
+});
+
 //To get stock details by stock id
 router.get('/:searchBatchID',(req,res,next)=>{
   let searchBatchID=req.params.searchBatchID;
